@@ -1,26 +1,38 @@
 {
-  "name": "Advanced Telegram Quiz Bot",
-  "description": "A fully-featured, high-volume quiz bot for Telegram, supporting set categories and user-generated content (UGC), built on Python and MongoDB.",
+  "name": "Hinglish Telegram Quiz Bot",
+  "description": "Ek Hinglish Telegram Quiz Bot jismein MongoDB, Broadcast System, aur Leaderboard hai. Deploy to Heroku button ke liye.",
+  "keywords": [
+    "telegram",
+    "bot",
+    "quiz",
+    "python",
+    "heroku",
+    "mongodb"
+  ],
+  "website": "https://github.com/AnshNaagar/quizbot",
   "repository": "https://github.com/AnshNaagar/quizbot",
-  "keywords": ["telegram", "bot", "quiz", "python", "mongodb", "heroku"],
-  "image": "heroku/python",
+  "success_url": "/",
+  "stack": "container",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
   "scripts": {
-    "postdeploy": "python setup_initial_data.py"
+    "postdeploy": "echo 'Bot is deployed! Check Heroku logs for the startup status.'"
   },
   "env": {
     "BOT_TOKEN": {
-      "description": "Your Telegram Bot Token obtained from BotFather.",
+      "description": "Tumhare Telegram BotFather se mila hua API token.",
       "required": true
     },
-    "DATABASE_URL": {
-      "description": "MongoDB Atlas connection string (mongodb+srv://user:pass@...).",
+    "ADMIN_ID": {
+      "description": "Tumhara Telegram User ID (sirf number) broadcast aur admin commands ke liye.",
       "required": true
-    }
-  },
-  "formation": {
-    "worker": {
-      "quantity": 1,
-      "size": "free"
+    },
+    "MONGO_URI": {
+      "description": "Tumhare MongoDB Atlas ya local server ki connection string. Example: mongodb+srv://user:pass@cluster.mongodb.net/dbname?retryWrites=true&w=majority",
+      "required": true
     }
   }
 }
