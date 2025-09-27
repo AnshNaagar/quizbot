@@ -1,1 +1,1 @@
-python-3.11.5
+python-3.10.12 # Apne preference ke anusaar change kar sakte ho
