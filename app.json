@@ -1,0 +1,26 @@
+{
+  "name": "Advanced Telegram Quiz Bot",
+  "description": "A fully-featured, high-volume quiz bot for Telegram, supporting set categories and user-generated content (UGC), built on Python and MongoDB.",
+  "repository": "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME",
+  "keywords": ["telegram", "bot", "quiz", "python", "mongodb", "heroku"],
+  "image": "heroku/python",
+  "scripts": {
+    "postdeploy": "python setup_initial_data.py"
+  },
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Your Telegram Bot Token obtained from BotFather.",
+      "required": true
+    },
+    "DATABASE_URL": {
+      "description": "MongoDB Atlas connection string (mongodb+srv://user:pass@...).",
+      "required": true
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
