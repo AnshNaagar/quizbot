@@ -1,51 +1,50 @@
-import logging
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler
-from config import BOT_TOKEN
-from handlers.user_handlers import start_command
-from handlers.quiz_handlers import quiz_command, answer_callback
-from utils.leaderboard import show_leaderboard
-from utils.broadcast import broadcast_handler
+import os
+# ... other imports ...
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler # ContextTypes ko yahan se import karne ki zarurat nahi, woh handlers mein ho gaya hai
 
-# Ensure DB manager is initialized by importing it
+from config import BOT_TOKEN, ADMIN_ID # ADMIN_ID yahan use hoga
+
+# ... handlers aur utils imports ...
 from database.db_manager import db_manager 
+import logging
+# logging setup...
 
-# --- Logging Setup ---
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
+# New Function
+async def send_startup_notification(app: Application, admin_id: int):
+    """Admin ko bot start hone ki notification bhejta hai."""
+    try:
+        # Check karte hain ki Admin ID 0 toh nahi hai aur usne bot ko block nahi kiya hai
+        if admin_id != 0:
+            await app.bot.send_message(
+                admin_id,
+                "✅ **Quiz Bot has successfully started (Deployed).**\n\n"
+                "Worker dyno is running in long-polling mode. Bot ab live hai! Test karne ke liye /start command bhejkar check karo.",
+                parse_mode='Markdown'
+            )
+    except Exception as e:
+        # Agar admin ne bot ko block kiya hai, toh yahan error aayega.
+        logger.error(f"Failed to send startup notification to admin: {e}")
+
+# New Async hook
+async def post_init(application: Application) -> None:
+    """Application initialize hone ke baad run hota hai."""
+    await send_startup_notification(application, ADMIN_ID)
+
 
 def main():
-    """Bot ko run karta hai aur saare handlers register karta hai."""
-    if not BOT_TOKEN:
-        logger.error("❌ BOT_TOKEN set nahi hai. Please check .env or Heroku Config Vars.")
-        return
-        
-    try:
-        # Check if DB connection succeeded
-        _ = db_manager 
-    except ValueError as e:
-        logger.error(f"Database Initialization failed: {e}")
-        return
-
+    # ... config and db checks ...
+    
     application = Application.builder().token(BOT_TOKEN).build()
+    
+    # Naya Hook: post_init function ko application object se jod do
+    application.post_init = post_init
 
     # --- Handlers Setup ---
+    # ... (Add all handlers here) ...
     
-    # User Commands
-    application.add_handler(CommandHandler("start", start_command))
-    
-    # Quiz and Leaderboard Commands
-    application.add_handler(CommandHandler("quiz", quiz_command))
-    application.add_handler(CommandHandler("leaderboard", show_leaderboard))
-    
-    # Callback Query Handler for Quiz Answers
-    application.add_handler(CallbackQueryHandler(answer_callback))
-
-    # Broadcast Conversation Handler
-    application.add_handler(broadcast_handler)
-
     # --- Run the bot ---
     logger.info("🚀 Starting Quiz Bot (Long Polling)...")
-    application.run_polling()
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
     main()
