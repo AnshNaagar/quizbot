@@ -1,5 +1,6 @@
 from database.db_manager import db_manager
-from telegram import Update, ContextTypes
+from telegram import Update
+from telegram.ext import ContextTypes # <-- Corrected Import
 
 async def show_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Top users aur unke scores dikhata hai."""
