@@ -1,5 +1,5 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ContextTypes # ContextTypes ko telegram.ext se import kiya
+from telegram.ext import ContextTypes # ContextTypes fix
 from database.db_manager import db_manager
 from config import SCORE_PER_QUESTION
 
