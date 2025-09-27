@@ -1,4 +1,5 @@
-from telegram import Update, ContextTypes, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ContextTypes # ContextTypes ko telegram.ext se import kiya
 from database.db_manager import db_manager
 from config import SCORE_PER_QUESTION
 
@@ -9,14 +10,12 @@ async def send_next_question(user_id: int, last_q_id: int, context: ContextTypes
     question = db_manager.get_next_question(last_q_id)
     
     if not question:
-        # Jab saare questions attempt ho chuke hon (ya database mein sirf 3 hi hon)
         await context.bot.send_message(user_id, "🎉 **Quiz Series Complete!** Saare questions attempt ho chuke hain.\n/leaderboard par apni rank dekho!", parse_mode='Markdown')
         return
 
     # Inline Keyboard for options
     keyboard = []
     for option in question["options"]:
-        # Callback data format: qid|answer_text
         callback_data = f'{question["q_id"]}|{option}'
         keyboard.append([InlineKeyboardButton(option, callback_data=callback_data)])
     
@@ -38,7 +37,6 @@ async def quiz_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     user_data = db_manager.get_or_create_user(user_id, update.effective_user.first_name)
     last_q_id = user_data.get('last_q_id', 0)
     
-    # Next question bhejte hain
     await send_next_question(user_id, last_q_id, context)
 
 async def answer_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
