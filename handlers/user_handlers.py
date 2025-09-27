@@ -1,5 +1,5 @@
 from telegram import Update
-from telegram.ext import ContextTypes # ContextTypes ab telegram.ext se import hoga
+from telegram.ext import ContextTypes # ContextTypes fix
 from database.db_manager import db_manager
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
