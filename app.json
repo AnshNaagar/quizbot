@@ -1,6 +1,6 @@
 {
   "name": "Hinglish Telegram Quiz Bot",
-  "description": "Ek Hinglish Telegram Quiz Bot jismein MongoDB, Broadcast System, aur Leaderboard hai. Deploy to Heroku button ke liye.",
+  "description": "MongoDB, Broadcast System, aur Leaderboard ke saath ek Telegram Quiz Bot.",
   "keywords": [
     "telegram",
     "bot",
@@ -10,9 +10,8 @@
     "mongodb"
   ],
   "website": "https://github.com/AnshNaagar/quizbot",
-  "repository": "https://github.com/AnshNaagar/quizbot",
+  "repository": "-https://github.com/AnshNaagar/quizbot",
   "success_url": "/",
-  "stack": "container",
   "buildpacks": [
     {
       "url": "heroku/python"
@@ -23,15 +22,15 @@
   },
   "env": {
     "BOT_TOKEN": {
-      "description": "Tumhare Telegram BotFather se mila hua API token.",
+      "description": "Telegram BotFather se mila hua API token.",
       "required": true
     },
     "ADMIN_ID": {
-      "description": "Tumhara Telegram User ID (sirf number) broadcast aur admin commands ke liye.",
+      "description": "Tumhara Telegram User ID (sirf number).",
       "required": true
     },
     "MONGO_URI": {
-      "description": "Tumhare MongoDB Atlas ya local server ki connection string. Example: mongodb+srv://user:pass@cluster.mongodb.net/dbname?retryWrites=true&w=majority",
+      "description": "MongoDB Atlas connection string.",
       "required": true
     }
   }
